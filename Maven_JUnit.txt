@@ -1,4 +1,4 @@
-**************************************************Maven**************************************************
+************************************************** Maven **************************************************
 
 mvn package - used to create a .jar file to test using maven.
 mvn clean - used to clean the project.
@@ -8,7 +8,7 @@ mvn dependency:tree - used to show the dependency tree of the project and here d
 mvn test - used to run tests.
 mvn archetype:generate - used to create a new type of project using the templates.
 
-***************************************************JUnit********************************************************
+*************************************************** JUnit ********************************************************
 
 @Test - used to mark a method as a test method.
 assertEquals(x,y) - used to check the equality of two values.
