@@ -1,0 +1,20 @@
+**************************************************Maven**************************************************
+
+mvn package - used to create a .jar file to test using maven.
+mvn clean - used to clean the project.
+mvn clean package - used to clean the project and then create a .jar file and both are of different lifecycles.
+mn clean install - used to clean the project and install copies jar files and put into local maven repository.
+mvn dependency:tree - used to show the dependency tree of the project and here dependency is a plugin.
+mvn test - used to run tests.
+mvn archetype:generate - used to create a new type of project using the templates.
+
+***************************************************JUnit********************************************************
+
+@Test - used to mark a method as a test method.
+assertEquals(x,y) - used to check the equality of two values.
+assertNotEquals(x,y) - used to check the inequality of two values.
+assertTrue(true) - used to check the truth of a condition.
+assertFalse(false) - used to check the falsity of a condition.
+@BeforeAll - the mentioned method runs before the actual test.
+@AfterAll - the mentioned method runs after the actual test.
+assertArrayEquals(arr1,arr2) - used to check the equality of two arrays.
