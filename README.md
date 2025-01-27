@@ -10,4 +10,6 @@ Basic understanding on static,enums,inheritance and lambda expressions.<br>
 Spring Framework configuration,beans and loose coupling.<br>
 Creation of beans directly by spring using components.<br>
 Dependency Injections, Annotations.<br>
-API, JDBC, JPA.
+API, JDBC, JPA.<br>
+Users and Posts Rest Api application.<br>
+Exploration of lomboks and custom queries.
