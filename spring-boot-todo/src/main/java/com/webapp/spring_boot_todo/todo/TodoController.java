@@ -1,6 +1,7 @@
 package com.webapp.spring_boot_todo.todo;
 
 import java.time.LocalDate;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,13 +45,31 @@ public class TodoController {
 		}
 		String username=(String)model.get("name");
 		todoService.addTodo(username, todo.getDescription(),
-				LocalDate.now().plusWeeks(5), false);
+				todo.getTargetDate(), false);
 		return "redirect:/list";
 	}
 	
 	@RequestMapping("/deletetodo")
 	public String deleteTodos(@RequestParam int id) {
 		todoService.deleteById(id);
+		return "redirect:/list";
+	}
+	
+	@RequestMapping(value="/updatetodo",method=RequestMethod.GET)
+	public String updateTodos(@RequestParam int id,ModelMap model) {
+		Todo todo=todoService.findById(id);
+		model.put("todo", todo);
+		return "addTodos";
+	}
+	
+	@RequestMapping(value= "/updatetodo",method=RequestMethod.POST)
+	public String updateTodo(ModelMap model,@Valid Todo todo,BindingResult result) {
+		if(result.hasErrors()) {
+			return "addTodos";
+		}
+		String username=(String)model.get("name");
+		todo.setUsername(username);
+		todoService.updateTodo(todo);
 		return "redirect:/list";
 	}
 }
