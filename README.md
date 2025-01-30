@@ -12,4 +12,5 @@ Creation of beans directly by spring using components.<br>
 Dependency Injections, Annotations.<br>
 API, JDBC, JPA.<br>
 Users and Posts Rest Api application.<br>
-Exploration of lomboks and custom queries.
+Exploration of lomboks and custom queries.<br>
+Complete ReactJs project with backend using Spring Boot.
