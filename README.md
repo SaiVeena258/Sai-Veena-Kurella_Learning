@@ -14,4 +14,5 @@ API, JDBC, JPA.<br>
 Users and Posts Rest Api application.<br>
 Exploration of lomboks and custom queries.<br>
 Complete ReactJs project with backend using Spring Boot.<br>
-Explored Mockito and java functional programming.
+Explored Mockito and java functional programming.<br>
+Docker deployement of ReactJs application.
