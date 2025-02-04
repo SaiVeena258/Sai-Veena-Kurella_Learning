@@ -1,0 +1,107 @@
+# version: '3.8'
+
+# services:
+#   backend:
+#     image: restapiimage
+#     container_name: spring-boot-app
+#     ports:
+#       - "8089:8084"
+#     environment:
+#       SPRING_APPLICATION_NAME: RestApi_project
+#       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/Courses
+#       SPRING_DATASOURCE_USERNAME: postgres
+#       SPRING_DATASOURCE_PASSWORD: saiveena
+#       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+#       SPRING_JPA_SHOW_SQL: "true"
+#       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+#     depends_on:
+#       db:
+#        condition: service_healthy
+
+#   db:
+#     image: postgres:16
+#     container_name: postgres-db
+#     restart: always
+#     environment:
+#       POSTGRES_DB: Courses
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: saiveena
+#     ports:
+#       - "5433:5432"
+	# volumes:
+	#   - postgres-data:/var/lib/postgresql/data
+	
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U postgres -d Courses"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+
+#   frontend:
+#     image: reactimage
+#     container_name: react-frontend
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - backend
+#     volumes:
+#       - .:/app
+#       - /app/node_modules
+
+
+version: '3.8'
+
+services:
+  backend:
+    container_name: backend
+    image: openjdk:17-jdk
+    build:
+      context: ./RestApi_project
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/Courses
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=saiveena 
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./ReactJs_Project
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+    depends_on:
+      - backend
+
+  db:
+    container_name: postgres_db
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: saiveena
+      POSTGRES_DB: Courses
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
