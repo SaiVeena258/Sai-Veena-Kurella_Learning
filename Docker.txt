@@ -30,58 +30,62 @@ In backend folder;
 
     #For springboot and postgress as backend(make neccesary changes of versions and other details according to the project)
         version: '3.8'
-        services:
-        backend:
-            image: restapiimage(backend image name)
-            container_name: spring-boot-app
-            ports:
-            - "8083:8083"
-            environment:
-            SPRING_APPLICATION_NAME: RestApi_project
-            SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/Courses
-            SPRING_DATASOURCE_USERNAME: postgres
-            SPRING_DATASOURCE_PASSWORD: saiveena
-            SPRING_JPA_HIBERNATE_DDL_AUTO: update
-            SPRING_JPA_SHOW_SQL: "true"
-            SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
-            depends_on:
+            services:
+            backend:
+                container_name: backend
+                image: openjdk:17-jdk
+                build:
+                context: ./RestApi_project
+                dockerfile: Dockerfile
+                ports:
+                - "8084:8084"
+                environment:
+                - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/Courses
+                - SPRING_DATASOURCE_USERNAME=postgres
+                - SPRING_DATASOURCE_PASSWORD=saiveena 
+                depends_on:
+                - db
+                networks:
+                - app_network
+
+            frontend:
+                container_name: frontend
+                build:
+                context: ./ReactJs_Project
+                dockerfile: Dockerfile
+                ports:
+                - "3000:3000"
+                networks:
+                - app_network
+                depends_on:
+                - backend
+
             db:
-            condition: service_healthy
+                container_name: postgres_db
+                image: postgres:13
+                environment:
+                POSTGRES_USER: postgres
+                POSTGRES_PASSWORD: saiveena
+                POSTGRES_DB: Courses
+                ports:
+                - "5433:5432"
+                volumes:
+                - postgres_data:/var/lib/postgresql/data
+                networks:
+                - app_network
 
-        db:
-            image: postgres:16
-            container_name: postgres-db
-            restart: always
-            environment:
-            POSTGRES_DB: Courses
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: saiveena
-            ports:
-            - "5432:5432"
-            healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres -d Courses"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+            networks:
+            app_network:
+                driver: bridge
 
-        frontend:
-            image: reactimage(frontend image name)
-            container_name: react-frontend
-            build:
-            context: .
-            dockerfile: Dockerfile
-            ports:
-            - "3000:3000"
-            depends_on:
-            - backend
             volumes:
-            - .:/app
-            - /app/node_modules  
+            postgres_data:
+                driver: local 
 
 3. Run 'mvn clean install'(everytime you make any kind of change in docker files)
 
 4. In terminal for backend;
     4.1. Go into the directory of backend folder
-    4.2. Run 'docker build -t backend-image-name .'
-    4.3. Run 'docker-compose up'
+    4.2. Run 'docker compose build'
+    4.3. Run 'docker compose up'
     4.4. Check for entire application at 'http://localhost:8081'(same frontend container created previously)
