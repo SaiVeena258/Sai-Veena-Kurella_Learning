@@ -26,7 +26,7 @@ In backend folder;
         COPY target/*.jar /app/app.jar
         ENTRYPOINT ["java", "-jar", "app.jar"]
 
-2. Create a file named docker-compose.yml:
+2. Create a file named docker-compose.yml in the folder containing both frontend and backend:
 
     #For springboot and postgress as backend(make neccesary changes of versions and other details according to the project)
         version: '3.8'
