@@ -1,12 +1,14 @@
 package com.mappings.one_one.service;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mappings.one_one.model.Idcard;
 import com.mappings.one_one.model.Student;
 import com.mappings.one_one.repository.IdcardRepository;
 import com.mappings.one_one.repository.StudentRepository;
@@ -21,6 +23,15 @@ public class StudentService {
 	private IdcardRepository idRepo;
 	
 	public Student createStu(Student stu) {
+		if (stu.getIdCard() != null && stu.getIdCard().getCardid() != 0) {
+            Optional<Idcard> idCardOpt = idRepo.findById(stu.getIdCard().getCardid());
+
+            if (idCardOpt.isPresent()) {
+                stu.setIdCard(idCardOpt.get());
+            } else {
+                throw new RuntimeException("ID card not found with ID: " + stu.getIdCard().getCardid());
+            }
+        }
         return stuRepo.save(stu);
     }
  
