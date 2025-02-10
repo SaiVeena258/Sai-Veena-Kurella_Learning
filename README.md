@@ -16,4 +16,5 @@ Exploration of lomboks and custom queries.<br>
 Complete ReactJs project with backend using Spring Boot.<br>
 Explored Mockito and java functional programming.<br>
 Docker deployement of ReactJs application.<br>
-One-One, Many-One and Many-Many mappings backend are done. 
+One-One, Many-One and Many-Many mappings backend are done.<br>
+Complex Table and Spring Security.
