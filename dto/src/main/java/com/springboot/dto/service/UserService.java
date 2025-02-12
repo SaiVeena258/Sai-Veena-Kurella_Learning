@@ -1,7 +1,6 @@
 package com.springboot.dto.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +17,7 @@ public class UserService {
 
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(UserMapper.INSTANCE::userToUserDTO)
-                .collect(Collectors.toList());
+        return UserMapper.INSTANCE.userListToUserDTOList(users);
     }
 
     public UserDTO createUser(User user) {
