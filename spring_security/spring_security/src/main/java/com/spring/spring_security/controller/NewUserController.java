@@ -24,3 +24,4 @@ public class NewUserController {
 		return userService.verify(user);
 	}
 }
+
