@@ -18,4 +18,4 @@ Explored Mockito and java functional programming.<br>
 Docker deployement of ReactJs application.<br>
 One-One, Many-One and Many-Many mappings backend are done.<br>
 Complex Table and DTO.<br>
-Spring Security.
+Spring Security till OAuth.

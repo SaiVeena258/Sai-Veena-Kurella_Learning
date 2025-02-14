@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mappings.many_one.model.Faculty;
+import com.mappings.many_one.model.Department;
 import com.mappings.many_one.repository.FacultyRepo;
+import com.mappings.many_one.repository.DepartmentRepo;
 
 @Service
 public class FacultyService {
@@ -16,7 +18,14 @@ public class FacultyService {
     @Autowired
     private FacultyRepo facultyRepo;
 
+    @Autowired
+    private DepartmentRepo departmentRepo;
+
     public Faculty createFaculty(Faculty faculty) {
+        Department dept = departmentRepo.findById(faculty.getDepartment().getDid())
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+        faculty.setDepartment(dept);
+
         return facultyRepo.save(faculty);
     }
 
@@ -30,12 +39,13 @@ public class FacultyService {
 
     public Faculty updateFaculty(Long id, Faculty updatedFaculty) {
         Optional<Faculty> existingFacultyOpt = facultyRepo.findById(id);
-
         if (existingFacultyOpt.isPresent()) {
             Faculty existingFaculty = existingFacultyOpt.get();
             existingFaculty.setFacultyname(updatedFaculty.getFacultyname());
-            existingFaculty.setDesignition(updatedFaculty.getDesignition());
-
+            existingFaculty.setDesignation(updatedFaculty.getDesignation());
+            Department dept = departmentRepo.findById(updatedFaculty.getDepartment().getDid())
+                    .orElseThrow(() -> new RuntimeException("Department not found"));
+            existingFaculty.setDepartment(dept);
             return facultyRepo.save(existingFaculty);
         } else {
             throw new RuntimeException("Faculty not found with ID: " + id);
@@ -43,12 +53,10 @@ public class FacultyService {
     }
 
     @Transactional
-    public void deleteFaculty(Long id) {
-        Optional<Faculty> faculty = facultyRepo.findById(id);
-        if (faculty.isPresent()) {
-            facultyRepo.delete(faculty.get());
-        } else {
-            throw new RuntimeException("Faculty not found with ID: " + id);
+    public void deleteById(Long id) {
+        if (!facultyRepo.existsById(id)) {
+            throw new RuntimeException("Faculty with ID " + id + " not found!");
         }
+        facultyRepo.deleteById(id);
     }
 }

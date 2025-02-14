@@ -1,10 +1,10 @@
 package com.mappings.many_one.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Entity
 @Data
@@ -12,8 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Department {
 
-	@Id
-	private long did;
-	private String dname;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long did;
 
+    private String dname;
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Faculty> faculties;
 }
