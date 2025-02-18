@@ -12,7 +12,7 @@ import com.mappings.many_one.service.FacultyService;
 
 @RestController
 @RequestMapping("/faculty")
-@CrossOrigin(origins="http://localhost:3001")
+//@CrossOrigin(origins="http://localhost:3000")
 public class FacultyController {
 
     @Autowired
@@ -47,14 +47,8 @@ public class FacultyController {
     }
 
     @DeleteMapping("/deletefaculty/{id}")
-    public ResponseEntity<String> deleteFaculty(@PathVariable Long id) {
-        try {
-            facultyService.deleteById(id);
-            return ResponseEntity.ok("Faculty deleted successfully!");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting faculty!");
-        }
+    public ResponseEntity<Void> deleteFaculty(@PathVariable Long id) {
+        facultyService.deleteFaculty(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

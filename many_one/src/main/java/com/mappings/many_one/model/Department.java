@@ -1,9 +1,12 @@
 package com.mappings.many_one.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;  // Import Jackson annotations
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,11 +16,10 @@ import java.util.List;
 public class Department {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long did;
-
     private String dname;
-
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Faculty> faculties;
+    
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)// Managed side of the bidirectional relationship, serialize faculty
+   // @JsonManagedReference
+    private List<Faculty> faculty = new ArrayList<>();
 }

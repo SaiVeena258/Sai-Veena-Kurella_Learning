@@ -1,42 +1,56 @@
 package com.mappings.many_one.controller;
 
-import com.mappings.many_one.model.Department;
-import com.mappings.many_one.service.DepartmentService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import com.mappings.many_one.model.Department;
+import com.mappings.many_one.service.DepartmentService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/department")
-@CrossOrigin(origins = "http://localhost:3001")
+//@CrossOrigin(origins="http://localhost:3000")
 public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
 
     @PostMapping("/adddepart")
-    public ResponseEntity<String> createDepartment(@RequestBody Department department) {
-        if (departmentService.existsByDname(department.getDname())) {
-            return ResponseEntity.status(409).body("Department already exists!");
-        }
-        departmentService.createDepartment(department);
-        return ResponseEntity.status(201).body("Department added successfully!");
+    public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
+        Department savedDepartment = departmentService.createDepartment(department);
+        return new ResponseEntity<>(savedDepartment, HttpStatus.CREATED);
     }
 
     @GetMapping("/displaydepart")
     public ResponseEntity<List<Department>> getAllDepartments() {
-        return ResponseEntity.ok(departmentService.getAllDepartments());
+        List<Department> departments = departmentService.getAllDepartments();
+        return new ResponseEntity<>(departments, HttpStatus.OK);
+    }
+
+    @GetMapping("/displaydepart/{id}")
+    public ResponseEntity<Department> getDepartmentById(@PathVariable Long id) {
+        Department department = departmentService.getDepartmentById(id);
+        if (department != null) {
+            return new ResponseEntity<>(department, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/updatedepart/{id}")
     public ResponseEntity<Department> updateDepartment(@PathVariable Long id, @RequestBody Department updatedDepartment) {
-        return ResponseEntity.ok(departmentService.updateDepartment(id, updatedDepartment));
+        Department department = departmentService.updateDepartment(id, updatedDepartment);
+        return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
     @DeleteMapping("/deletedepart/{id}")
-    public ResponseEntity<String> deleteDepartment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
-        return ResponseEntity.ok("Department deleted successfully!");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

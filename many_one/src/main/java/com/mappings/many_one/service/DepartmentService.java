@@ -1,21 +1,28 @@
 package com.mappings.many_one.service;
 
-import com.mappings.many_one.model.Department;
-import com.mappings.many_one.repository.DepartmentRepo;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
+
+import com.mappings.many_one.model.Department;
+import com.mappings.many_one.model.Faculty;
+import com.mappings.many_one.repository.DepartmentRepo;
+import com.mappings.many_one.repository.FacultyRepo;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class DepartmentService {
 
     @Autowired
     private DepartmentRepo departmentRepo;
-
-    public boolean existsByDname(String dname) {
-        return departmentRepo.existsByDname(dname);
-    }
+    
+    @Autowired
+    private FacultyRepo facultyRepo;
 
     public Department createDepartment(Department department) {
         return departmentRepo.save(department);
@@ -30,17 +37,32 @@ public class DepartmentService {
     }
 
     public Department updateDepartment(Long id, Department updatedDepartment) {
-        return departmentRepo.findById(id).map(department -> {
-            department.setDname(updatedDepartment.getDname());
-            return departmentRepo.save(department);
-        }).orElseThrow(() -> new RuntimeException("Department not found with ID: " + id));
+        Optional<Department> existingDepartmentOpt = departmentRepo.findById(id);
+
+        if (existingDepartmentOpt.isPresent()) {
+            Department existingDepartment = existingDepartmentOpt.get();
+            existingDepartment.setDname(updatedDepartment.getDname());
+
+            return departmentRepo.save(existingDepartment);
+        } else {
+            throw new RuntimeException("Department not found with ID: " + id);
+        }
     }
 
-    @Transactional
-    public void deleteDepartment(Long id) {
-        departmentRepo.findById(id).ifPresentOrElse(
-            departmentRepo::delete,
-            () -> { throw new RuntimeException("Department not found with ID: " + id); }
-        );
+    //@Transactional
+    public void deleteDepartment(long id) {
+    		log.info("id:{}",id);
+        Optional<Department> departmentOptional = departmentRepo.findById(id);
+
+        if (departmentOptional.isPresent()) {
+            Department department = departmentOptional.get();
+
+          departmentRepo.deleteById(id);
+        } else {
+            throw new RuntimeException("Department not found!");
+        }
     }
-}
+
+
+    }
+    
