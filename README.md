@@ -19,3 +19,4 @@ Docker deployement of ReactJs application.<br>
 One-One, Many-One and Many-Many mappings backend are done.<br>
 Complex Table and DTO.<br>
 Spring Security till OAuth.<br>
+Many to One full stack project(FacultyDepartment).
