@@ -1,5 +1,7 @@
 package com.spring.event_management.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.spring.event_management.entities.Event;
@@ -17,6 +19,10 @@ public class SpeakerService {
     private final SpeakerRepo speakerRepo;
     private final UsersRepo usersRepo;
     private final EventRepo eventRepo;
+    
+    public List<Speaker> getSpeakersByEvent(Long eventId) {
+        return speakerRepo.findByEventId(eventId);
+    }
 
     public Speaker assignSpeaker(Long speakerId, Long eventId, String topic) {
         Users speaker = usersRepo.findById(speakerId)

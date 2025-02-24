@@ -11,4 +11,6 @@ import com.spring.event_management.entities.Users;
 @Repository
 public interface RegistrationRepo extends JpaRepository<Registration, Long> {
     List<Registration> findByAttendee(Users attendee);
+    List<Registration> findByEventId(Long eventId);
+
 }

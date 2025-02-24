@@ -1,8 +1,9 @@
 package com.spring.event_management.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
-
-
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SpeakerController {
     private final SpeakerService speakerService;
+    
+    @GetMapping("/event/{eventId}")
+    public ResponseEntity<List<Speaker>> getSpeakersByEvent(@PathVariable Long eventId) {
+        return ResponseEntity.ok(speakerService.getSpeakersByEvent(eventId));
+    }
 
     @PostMapping("/{speakerId}/{eventId}")
     public ResponseEntity<Speaker> assignSpeaker(

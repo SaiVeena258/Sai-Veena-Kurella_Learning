@@ -27,4 +27,10 @@ public class EventService {
     public List<Event> getAllEvents() {
         return eventRepo.findAll();
     }
+    
+    public Event getEventById(Long id) {
+        return eventRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+    }
+
 }

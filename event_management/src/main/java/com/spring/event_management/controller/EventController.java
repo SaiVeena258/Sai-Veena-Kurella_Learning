@@ -20,6 +20,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.getEventById(id));
+    }
 
     @PostMapping("/{organizerId}")
     public ResponseEntity<Event> createEvent(@RequestBody Event event, @PathVariable Long organizerId) {
