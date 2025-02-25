@@ -20,4 +20,5 @@ One-One, Many-One and Many-Many mappings backend are done.<br>
 Complex Table and DTO.<br>
 Spring Security till OAuth.<br>
 Many to One full stack project(FacultyDepartment).<br>
-Event Management project(Backend).
+Event Management project(Backend).<br>
+Server Side Paginaition(Practice).
