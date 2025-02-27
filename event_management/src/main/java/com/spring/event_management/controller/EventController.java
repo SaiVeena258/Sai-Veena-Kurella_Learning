@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/events")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class EventController {
     private final EventService eventService;
     

@@ -19,15 +19,16 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/speakers")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class SpeakerController {
     private final SpeakerService speakerService;
     
     @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<Speaker>> getSpeakersByEvent(@PathVariable Long eventId) {
-        return ResponseEntity.ok(speakerService.getSpeakersByEvent(eventId));
+    public ResponseEntity<List<Speaker>> getSpeakersForEvent(@PathVariable Long eventId) {
+        List<Speaker> speakers = speakerService.getSpeakersByEvent(eventId);
+        return ResponseEntity.ok(speakers);
     }
-
+    
     @PostMapping("/{speakerId}/{eventId}")
     public ResponseEntity<Speaker> assignSpeaker(
             @PathVariable Long speakerId,

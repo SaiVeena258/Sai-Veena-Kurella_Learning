@@ -1,6 +1,7 @@
 package com.spring.event_management.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ public class Speaker {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Users speaker;
 
     @ManyToOne

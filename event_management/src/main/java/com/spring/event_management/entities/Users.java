@@ -2,8 +2,10 @@ package com.spring.event_management.entities;
 
 import java.util.List;
 
+
 import org.hibernate.annotations.ManyToAny;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -37,7 +39,7 @@ public class Users {
     private String role; 
 
     @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonBackReference
     private List<Event> organizedEvents;
 
     @ManyToAny
@@ -55,6 +57,6 @@ public class Users {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    @JsonManagedReference
+    @JsonBackReference
     private List<Event> speakingEvents;
 }

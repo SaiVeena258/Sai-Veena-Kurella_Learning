@@ -29,8 +29,8 @@ public class EventService {
     }
     
     public Event getEventById(Long id) {
-        return eventRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+        return eventRepo.findEventWithOrganizer(id);
     }
+
 
 }

@@ -3,6 +3,7 @@ package com.spring.event_management.entities;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name = "organizer_id")
-    @JsonBackReference 
+    @JsonManagedReference 
     private Users organizer;
 
     @ManyToMany(mappedBy = "registeredEvents")
