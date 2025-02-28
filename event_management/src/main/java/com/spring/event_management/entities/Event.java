@@ -1,18 +1,8 @@
 package com.spring.event_management.entities;
 
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,24 +13,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "events")
 public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
+	
     private String eventname;
     private String description;
+    
+    @Id
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "organizer_id")
-    @JsonManagedReference 
-    private Users organizer;
+    @ManyToMany
+    @JoinTable(
+        name = "event_organizers",
+        joinColumns = @JoinColumn(name = "event_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore
+    private List<Users> organizers;  
 
     @ManyToMany(mappedBy = "registeredEvents")
-    @JsonBackReference
+    @JsonIgnore 
     private List<Users> attendees;
 
     @ManyToMany(mappedBy = "speakingEvents")
-    @JsonBackReference
+    @JsonIgnore  
     private List<Users> speakers;
-}
 
+}

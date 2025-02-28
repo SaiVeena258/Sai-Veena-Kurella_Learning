@@ -17,20 +17,36 @@ public class EventService {
     private final EventRepo eventRepo;
     private final UsersRepo usersRepo;
 
+    // Create event with a single organizer
     public Event createEvent(Event event, Long organizerId) {
         Users organizer = usersRepo.findById(organizerId)
                 .orElseThrow(() -> new RuntimeException("Organizer not found"));
-        event.setOrganizer(organizer);
+        event.getOrganizers().add(organizer);
         return eventRepo.save(event);
     }
 
+    // Assign multiple organizers to an existing event
+    public Event assignOrganizers(Long eventId, List<Long> organizerIds) {
+        Event event = eventRepo.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        List<Users> organizers = usersRepo.findAllById(organizerIds);
+        if (organizers.isEmpty()) {
+            throw new RuntimeException("No valid organizers found");
+        }
+
+        event.getOrganizers().addAll(organizers);
+        return eventRepo.save(event);
+    }
+
+    // Get all events
     public List<Event> getAllEvents() {
         return eventRepo.findAll();
     }
-    
+
+    // Get an event by ID
     public Event getEventById(Long id) {
-        return eventRepo.findEventWithOrganizer(id);
+        return eventRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Event with ID " + id + " not found"));
     }
-
-
 }

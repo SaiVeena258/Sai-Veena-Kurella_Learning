@@ -1,26 +1,11 @@
 package com.spring.event_management.entities;
 
 import java.util.List;
-
-
-import org.hibernate.annotations.ManyToAny;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.JoinColumn;
 
 @Entity
 @Data
@@ -28,27 +13,27 @@ import jakarta.persistence.JoinColumn;
 @NoArgsConstructor
 @Table(name = "users")
 public class Users {
-    
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String username;
     private String email;
     private String password;
-    private String role; 
+    private String role;
 
-    @OneToMany(mappedBy = "organizer", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @ManyToMany(mappedBy = "organizers")
+    @JsonIgnore  
     private List<Event> organizedEvents;
 
-    @ManyToAny
+    @ManyToMany
     @JoinTable(
         name = "registrations",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    @JsonManagedReference
+    @JsonIgnore 
     private List<Event> registeredEvents;
 
     @ManyToMany
@@ -57,6 +42,6 @@ public class Users {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    @JsonBackReference
+    @JsonIgnore 
     private List<Event> speakingEvents;
 }

@@ -21,10 +21,10 @@ public class RegistrationService {
     private final EventRepo eventRepo;
     
     public List<Users> getAttendeesByEvent(Long eventId) {
-        return registrationRepo.findByEventId(eventId)
-                .stream()
-                .map(Registration::getAttendee)
-                .toList();
+    	return registrationRepo.findByEvent_Id(eventId)
+    	        .stream()
+    	        .map(Registration::getAttendee)
+    	        .toList();
     }
 
     public Registration registerForEvent(Long userId, Long eventId) {

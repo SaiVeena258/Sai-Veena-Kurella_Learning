@@ -1,15 +1,9 @@
 package com.spring.event_management.controller;
 
 import java.util.List;
-
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.spring.event_management.entities.Speaker;
 import com.spring.event_management.service.SpeakerService;
@@ -17,23 +11,36 @@ import com.spring.event_management.service.SpeakerService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/speakers")
+@RequestMapping("/api/speakers")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class SpeakerController {
     private final SpeakerService speakerService;
-    
-    @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<Speaker>> getSpeakersForEvent(@PathVariable Long eventId) {
-        List<Speaker> speakers = speakerService.getSpeakersByEvent(eventId);
-        return ResponseEntity.ok(speakers);
+
+    @GetMapping(value = "/event/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Speaker>> getSpeakersForEvent(@PathVariable Long id) {
+        return ResponseEntity.ok(speakerService.getSpeakersByEvent(id));
     }
     
-    @PostMapping("/{speakerId}/{eventId}")
+    @PostMapping(value = "/{speakerId}/{id}", 
+                 consumes = MediaType.APPLICATION_JSON_VALUE, 
+                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Speaker> assignSpeaker(
             @PathVariable Long speakerId,
-            @PathVariable Long eventId,
-            @RequestParam String topic) {
-        return ResponseEntity.ok(speakerService.assignSpeaker(speakerId, eventId, topic));
+            @PathVariable Long id,
+            @RequestBody SpeakerRequest speakerRequest) { 
+        return ResponseEntity.ok(speakerService.assignSpeaker(speakerId, id, speakerRequest.getTopic()));
+    }
+
+    public static class SpeakerRequest {
+        private String topic;
+        
+        public String getTopic() {
+            return topic;
+        }
+
+        public void setTopic(String topic) {
+            this.topic = topic;
+        }
     }
 }
