@@ -1,0 +1,86 @@
+.event-container {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    border-radius: 15px;
+}
+
+.event-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.5);
+}
+
+.title-underline {
+    width: 150px;
+    height: 5px;
+    background-color: white;
+    margin: 10px auto;
+    border-radius: 3px;
+}
+
+.organizer-card, .speaker-card, .attendee-card {
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.organizer-card:hover, .speaker-card:hover, .attendee-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(255, 255, 255, 0.5);
+}
+
+.organizer-card {
+    background-color: rgba(255, 183, 77, 0.8);
+}
+
+.speaker-card {
+    background-color: rgba(77, 195, 255, 0.8);
+}
+
+.attendee-card {
+    background-color: rgba(129, 255, 129, 0.8);
+}
+
+.list-group-item {
+    border-radius: 8px;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 10px; 
+    padding: 10px;
+}
+
+.list-group-item:last-child {
+    margin-bottom: 0;
+}
+
+.event-box {
+    background: rgba(255, 255, 255, 0.1); 
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 
+        0 0 5px rgba(255, 255, 255, 0.2), 
+        0 0 15px rgba(255, 255, 255, 0.1), 
+        inset 0 0 10px rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px); 
+    margin-top: 20px;
+}
+
+.collapsible-title {
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.collapsible-title:hover {
+    color: #f8f9fa;
+}
+
+.list-group {
+    transition: max-height 0.5s ease-in-out;
+    overflow: hidden;
+    max-height: 500px;
+}
+
+.list-group.collapsed {
+    max-height: 0;
+}
