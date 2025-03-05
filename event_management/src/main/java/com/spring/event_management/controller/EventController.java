@@ -4,10 +4,8 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.spring.event_management.entities.Event;
 import com.spring.event_management.service.EventService;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController

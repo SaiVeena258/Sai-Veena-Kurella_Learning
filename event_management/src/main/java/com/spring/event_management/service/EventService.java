@@ -1,14 +1,12 @@
 package com.spring.event_management.service;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.spring.event_management.entities.Event;
 import com.spring.event_management.entities.Users;
 import com.spring.event_management.repos.EventRepo;
 import com.spring.event_management.repos.UsersRepo;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,10 +15,14 @@ public class EventService {
     private final EventRepo eventRepo;
     private final UsersRepo usersRepo;
 
-    // Create event with a single organizer
     public Event createEvent(Event event, Long organizerId) {
         Users organizer = usersRepo.findById(organizerId)
-                .orElseThrow(() -> new RuntimeException("Organizer not found"));
+                .orElseThrow(() -> new RuntimeException("Organizer not found with ID: " + organizerId));
+
+        if (event.getOrganizers() == null) { 
+            event.setOrganizers(new ArrayList<>());  // ✅ Fix: Initialize list if null
+        }
+
         event.getOrganizers().add(organizer);
         return eventRepo.save(event);
     }

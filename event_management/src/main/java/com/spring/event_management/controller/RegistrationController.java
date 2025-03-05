@@ -23,7 +23,7 @@ public class RegistrationController {
         return ResponseEntity.ok(registrationService.getAttendeesByEvent(id));
     }
 
-    @PostMapping(value = "/{userId}/{id}", 
+    @PostMapping(value = "/{id}/{userId}", 
                  consumes = MediaType.APPLICATION_JSON_VALUE, 
                  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Registration> registerForEvent(

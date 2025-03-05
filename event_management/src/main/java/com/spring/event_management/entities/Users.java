@@ -1,5 +1,6 @@
 package com.spring.event_management.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class Users {
 
     @ManyToMany(mappedBy = "organizers")
     @JsonIgnore  
-    private List<Event> organizedEvents;
+    private List<Event> organizedEvents = new ArrayList<>(); // ✅ Fix: Initialize list
 
     @ManyToMany
     @JoinTable(
@@ -34,7 +35,7 @@ public class Users {
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     @JsonIgnore 
-    private List<Event> registeredEvents;
+    private List<Event> registeredEvents = new ArrayList<>(); // ✅ Fix
 
     @ManyToMany
     @JoinTable(
@@ -43,5 +44,5 @@ public class Users {
         inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     @JsonIgnore 
-    private List<Event> speakingEvents;
+    private List<Event> speakingEvents = new ArrayList<>(); // ✅ Fix
 }
