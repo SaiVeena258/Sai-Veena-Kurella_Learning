@@ -13,11 +13,8 @@ import com.spring.event_management.entities.Users;
 
 @Repository
 public interface EventRepo extends JpaRepository<Event, Long> {
-	
 	List<Event> findByOrganizers(Users user);
-	
     @Query("SELECT e FROM Event e JOIN FETCH e.organizers WHERE e.id = :id")
-    
     Optional<Event> findEventWithOrganizer(@Param("id") Long id);
 
     Optional<Event> findById(Long id);

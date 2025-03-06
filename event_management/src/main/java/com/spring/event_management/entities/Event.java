@@ -1,11 +1,7 @@
 package com.spring.event_management.entities;
 
-
-import java.util.ArrayList;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,16 +27,14 @@ public class Event {
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     @JsonIgnore
-    private List<Users> organizers = new ArrayList<>();  // ✅ Fix: Initialize list
+    private List<Users> organizers;  
 
     @ManyToMany(mappedBy = "registeredEvents")
     @JsonIgnore 
-    private List<Users> attendees = new ArrayList<>(); // ✅ Fix
+    private List<Users> attendees;
 
     @ManyToMany(mappedBy = "speakingEvents")
-   
     @JsonIgnore  
-    private List<Users> speakers = new ArrayList<>(); // ✅ Fix
-
+    private List<Users> speakers;
 
 }

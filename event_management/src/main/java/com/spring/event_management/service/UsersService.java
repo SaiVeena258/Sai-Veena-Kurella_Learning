@@ -1,5 +1,7 @@
 package com.spring.event_management.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.spring.event_management.entities.Users;
@@ -19,4 +21,8 @@ public class UsersService {
     public Users registerUser(Users user) {
         return usersRepo.save(user);
     }
+
+	public List<Users> getAllUsers() {
+		return usersRepo.findAll();
+	}
 }

@@ -1,5 +1,7 @@
 package com.spring.event_management.controller;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,11 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "*")
 public class UsersController {
     private final UsersService usersService;
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Users>> getAllUsers() {
+        return ResponseEntity.ok(usersService.getAllUsers());
+    }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Users> getUser(@PathVariable Long id) {
