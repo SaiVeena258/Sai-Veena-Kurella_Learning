@@ -24,17 +24,25 @@ const EventDetails = () => {
     useEffect(() => {
         const fetchEventData = async () => {
             try {
-                const [eventResponse, usersResponse] = await Promise.all([
-                    axios.get(`http://localhost:8085/api/events/${eventIdNum}`),
-                    axios.get("http://localhost:8085/api/users")
-                ]);
-
+                const eventResponse = await axios.get(`http://localhost:8085/api/events/${eventIdNum}`);
                 setEvent(eventResponse.data);
-                const users = usersResponse.data;
 
-                setOrganizers(users.filter(user => user.role === "Organizer"));
-                setSpeakers(users.filter(user => user.role === "Speaker"));
-                setAttendees(users.filter(user => user.role === "Attendee"));
+                const organizersResponse = await axios.get(`http://localhost:8085/api/events/${eventIdNum}/organizers`);
+                setOrganizers(organizersResponse.data);
+
+                try {
+                    const speakersResponse = await axios.get(`http://localhost:8085/api/speakers/event/${eventIdNum}`);
+                    setSpeakers(speakersResponse.data);
+                } catch {
+                    console.warn("Speakers API failed, skipping.");
+                }
+
+                try {
+                    const attendeesResponse = await axios.get(`http://localhost:8085/api/registrations/event/${eventIdNum}`);
+                    setAttendees(attendeesResponse.data);
+                } catch {
+                    console.warn("Attendees API failed, skipping.");
+                }
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 setError("Failed to load event details.");
@@ -87,7 +95,7 @@ const EventDetails = () => {
                                 <ul className="list-group mt-2">
                                     {speakers.length > 0 ? (
                                         speakers.map(spk => (
-                                            <li key={spk.id} className="list-group-item">{spk.username}</li>
+                                            <li key={spk.id} className="list-group-item">{spk.username} - {spk.topic}</li>
                                         ))
                                     ) : (
                                         <li className="list-group-item">No speakers available</li>
