@@ -1,10 +1,12 @@
 package com.spring.event_management.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.spring.event_management.dto.SpeakerDTO;
 import com.spring.event_management.entities.Event;
 import com.spring.event_management.entities.Speaker;
 import com.spring.event_management.entities.Users;
@@ -21,30 +23,42 @@ public class SpeakerService {
     private final UsersRepo usersRepo;
     private final EventRepo eventRepo;
     
-    public List<Speaker> getSpeakersByEvent(Long id) {
-        return speakerRepo.findByEvent_Id(id);
-    }
+    public List<SpeakerDTO> getSpeakersByEvent(Long id) {
+        List<Speaker> speakers = speakerRepo.findByEvent_Id(id);
 
-    // Assign a speaker to an event
+        // Convert Speaker entities to SpeakerDTO
+        return speakers.stream().map(speaker -> 
+            new SpeakerDTO(
+                speaker.getId(),
+                speaker.getTopic(),
+                speaker.getSpeaker().getUsername() 
+            )
+        ).collect(Collectors.toList());
+    }
+    
     @Transactional
-    public Speaker assignSpeaker(Long speakerId, Long id, String topic) {
+    public SpeakerDTO assignSpeaker(Long speakerId, Long eventId, String topic) {
         Users speaker = usersRepo.findById(speakerId)
                 .orElseThrow(() -> new RuntimeException("Speaker with ID " + speakerId + " not found"));
         
-        Event event = eventRepo.findById(id) // Fix method call
-                .orElseThrow(() -> new RuntimeException("Event with eventId " + id + " not found"));
+        Event event = eventRepo.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event with eventId " + eventId + " not found"));
 
-        // Check if the speaker is already assigned to the event
         if (speakerRepo.existsBySpeakerAndEvent(speaker, event)) {
             throw new RuntimeException("Speaker is already assigned to this event.");
         }
-
-        // Create new speaker entry
+        
         Speaker speakerEntry = new Speaker();
         speakerEntry.setSpeaker(speaker);
         speakerEntry.setEvent(event);
         speakerEntry.setTopic(topic);
 
-        return speakerRepo.save(speakerEntry);
+        Speaker savedSpeaker = speakerRepo.save(speakerEntry);
+
+        return new SpeakerDTO(
+                savedSpeaker.getId(),
+                savedSpeaker.getTopic(),
+                savedSpeaker.getSpeaker().getUsername()
+        );
     }
 }

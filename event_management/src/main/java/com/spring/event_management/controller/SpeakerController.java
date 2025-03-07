@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.spring.event_management.entities.Speaker;
+import com.spring.event_management.dto.SpeakerDTO;
 import com.spring.event_management.service.SpeakerService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,18 +18,18 @@ public class SpeakerController {
     private final SpeakerService speakerService;
 
     @GetMapping(value = "/event/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Speaker>> getSpeakersForEvent(@PathVariable Long id) {
+    public ResponseEntity<List<SpeakerDTO>> getSpeakersForEvent(@PathVariable Long id) {
         return ResponseEntity.ok(speakerService.getSpeakersByEvent(id));
     }
     
-    @PostMapping(value = "/{speakerId}/{id}", 
+    @PostMapping(value = "/{speakerId}/{eventId}", 
                  consumes = MediaType.APPLICATION_JSON_VALUE, 
                  produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Speaker> assignSpeaker(
+    public ResponseEntity<SpeakerDTO> assignSpeaker(
             @PathVariable Long speakerId,
-            @PathVariable Long id,
+            @PathVariable Long eventId,
             @RequestBody SpeakerRequest speakerRequest) { 
-        return ResponseEntity.ok(speakerService.assignSpeaker(speakerId, id, speakerRequest.getTopic()));
+        return ResponseEntity.ok(speakerService.assignSpeaker(speakerId, eventId, speakerRequest.getTopic()));
     }
 
     public static class SpeakerRequest {

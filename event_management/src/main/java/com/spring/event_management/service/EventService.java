@@ -9,6 +9,7 @@ import com.spring.event_management.entities.Event;
 import com.spring.event_management.entities.Users;
 import com.spring.event_management.repos.EventRepo;
 import com.spring.event_management.repos.UsersRepo;
+import com.spring.event_management.repos.RegistrationRepo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class EventService {
     private final EventRepo eventRepo;
     private final UsersRepo usersRepo;
+    private final RegistrationRepo registrationRepo;
 
     // Create event with a single organizer
     public Event createEvent(Event event, Long organizerId) {
@@ -57,4 +59,16 @@ public class EventService {
                 .orElseThrow(() -> new RuntimeException("Event not found"));
         return event.getOrganizers().stream().collect(Collectors.toList());
     }
+
+    // Get attendees for a specific event
+    public List<Users> getAttendeesByEventId(Long eventId) {
+        return registrationRepo.findByEvent_Id(eventId).stream()
+                .map(registration -> registration.getAttendee())
+                .collect(Collectors.toList());
+    }
+    
+    public List<String> getAttendeeNamesByEventId(Long eventId) {
+        return registrationRepo.findAttendeeNamesByEventId(eventId);
+    }
+
 }
