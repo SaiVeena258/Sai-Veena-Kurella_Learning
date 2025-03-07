@@ -32,17 +32,30 @@ const EventDetails = () => {
 
                 try {
                     const speakersResponse = await axios.get(`http://localhost:8085/api/speakers/event/${eventIdNum}`);
-                    setSpeakers(speakersResponse.data);
+                    const formattedSpeakers = speakersResponse.data.map(spk => ({
+                        id: spk.id,
+                        name: spk.username,
+                        topic: spk.topic || "No topic available"
+                    }));
+                    setSpeakers(formattedSpeakers);
                 } catch {
                     console.warn("Speakers API failed, skipping.");
                 }
 
                 try {
-                    const attendeesResponse = await axios.get(`http://localhost:8085/api/registrations/event/${eventIdNum}`);
-                    setAttendees(attendeesResponse.data);
-                } catch {
+                    const attendeesResponse = await axios.get(`http://localhost:8085/api/events/${eventIdNum}/attendees`);
+                    console.log("Attendees Response:", attendeesResponse.data); 
+
+                    const formattedAttendees = attendeesResponse.data.map((name, index) => ({
+                        id: index, 
+                        name: name || "Unknown Attendee"
+                    }));
+                    
+                    setAttendees(formattedAttendees);
+                } catch (error) {
                     console.warn("Attendees API failed, skipping.");
                 }
+                
             } catch (error) {
                 console.error("Error fetching event details:", error);
                 setError("Failed to load event details.");
@@ -95,7 +108,7 @@ const EventDetails = () => {
                                 <ul className="list-group mt-2">
                                     {speakers.length > 0 ? (
                                         speakers.map(spk => (
-                                            <li key={spk.id} className="list-group-item">{spk.username} - {spk.topic}</li>
+                                            <li key={spk.id} className="list-group-item">{spk.name} - {spk.topic}</li>
                                         ))
                                     ) : (
                                         <li className="list-group-item">No speakers available</li>
@@ -113,7 +126,7 @@ const EventDetails = () => {
                                 <ul className="list-group mt-2">
                                     {attendees.length > 0 ? (
                                         attendees.map(att => (
-                                            <li key={att.id} className="list-group-item">{att.username}</li>
+                                            <li key={att.id} className="list-group-item">{att.name}</li>
                                         ))
                                     ) : (
                                         <li className="list-group-item">No attendees available</li>
