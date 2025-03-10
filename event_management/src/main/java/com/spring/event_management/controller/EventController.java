@@ -23,8 +23,8 @@ public class EventController {
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
         return ResponseEntity.ok(eventService.getEventById(id));
     }
-    
-    @GetMapping("/events/{eventId}/attendees")
+
+    @GetMapping("/{eventId}/attendees")
     public ResponseEntity<List<String>> getEventAttendees(@PathVariable Long eventId) {
         return ResponseEntity.ok(eventService.getAttendeeNamesByEventId(eventId));
     }

@@ -15,6 +15,7 @@ public interface RegistrationRepo extends JpaRepository<Registration, Long> {
     List<Registration> findByAttendee(Users attendee);
     List<Registration> findByEvent_Id(Long eventId);
     
-    @Query("SELECT r.attendee.username FROM Registration r WHERE r.event.id = :eventId")
+    @Query("SELECT r.attendee.username FROM Registration r WHERE r.event.id = :eventId AND r.role = 'ATTENDEE'")
     List<String> findAttendeeNamesByEventId(@Param("eventId") Long eventId);
+
 }

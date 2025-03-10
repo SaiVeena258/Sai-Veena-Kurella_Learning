@@ -1,6 +1,7 @@
 package com.spring.event_management.controller;
 
 import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +19,16 @@ import lombok.RequiredArgsConstructor;
 public class RegistrationController {
     private final RegistrationService registrationService;
 
-    @GetMapping(value = "/event/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/event/{id}/attendees", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Users>> getAttendeesByEvent(@PathVariable Long id) {
         return ResponseEntity.ok(registrationService.getAttendeesByEvent(id));
     }
 
-    @PostMapping(value = "/{userId}/{id}", 
-                 consumes = MediaType.APPLICATION_JSON_VALUE, 
-                 produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/{role}/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Registration> registerForEvent(
+            @PathVariable Long id, 
             @PathVariable Long userId, 
-            @PathVariable Long id) {
-        return ResponseEntity.ok(registrationService.registerForEvent(userId, id));
+            @PathVariable String role) {
+        return ResponseEntity.ok(registrationService.registerForEvent(userId, id, role));
     }
 }

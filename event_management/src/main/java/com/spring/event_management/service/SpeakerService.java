@@ -26,7 +26,6 @@ public class SpeakerService {
     public List<SpeakerDTO> getSpeakersByEvent(Long id) {
         List<Speaker> speakers = speakerRepo.findByEvent_Id(id);
 
-        // Convert Speaker entities to SpeakerDTO
         return speakers.stream().map(speaker -> 
             new SpeakerDTO(
                 speaker.getId(),

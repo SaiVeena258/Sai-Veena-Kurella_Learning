@@ -20,7 +20,6 @@ public class EventService {
     private final UsersRepo usersRepo;
     private final RegistrationRepo registrationRepo;
 
-    // Create event with a single organizer
     public Event createEvent(Event event, Long organizerId) {
         Users organizer = usersRepo.findById(organizerId)
                 .orElseThrow(() -> new RuntimeException("Organizer not found"));
@@ -28,7 +27,6 @@ public class EventService {
         return eventRepo.save(event);
     }
 
-    // Assign multiple organizers to an existing event
     public Event assignOrganizers(Long eventId, List<Long> organizerIds) {
         Event event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
@@ -42,33 +40,28 @@ public class EventService {
         return eventRepo.save(event);
     }
 
-    // Get all events
     public List<Event> getAllEvents() {
         return eventRepo.findAll();
     }
 
-    // Get an event by ID
     public Event getEventById(Long id) {
         return eventRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event with ID " + id + " not found"));
     }
 
-    // Get organizers for a specific event
     public List<Users> getOrganizersByEventId(Long eventId) {
-        Event event = eventRepo.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("Event not found"));
-        return event.getOrganizers().stream().collect(Collectors.toList());
+        return eventRepo.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"))
+                .getOrganizers();
     }
 
-    // Get attendees for a specific event
     public List<Users> getAttendeesByEventId(Long eventId) {
         return registrationRepo.findByEvent_Id(eventId).stream()
                 .map(registration -> registration.getAttendee())
                 .collect(Collectors.toList());
     }
-    
+
     public List<String> getAttendeeNamesByEventId(Long eventId) {
         return registrationRepo.findAttendeeNamesByEventId(eventId);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.spring.event_management.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -19,23 +20,24 @@ public class RegistrationService {
     private final RegistrationRepo registrationRepo;
     private final UsersRepo userRepo;
     private final EventRepo eventRepo;
-    
-    public List<Users> getAttendeesByEvent(Long eventId) {
-    	return registrationRepo.findByEvent_Id(eventId)
-    	        .stream()
-    	        .map(Registration::getAttendee)
-    	        .toList();
+
+    public List<Users> getAttendeesByEvent(Long id) {
+        return registrationRepo.findByEvent_Id(id).stream()
+                .filter(reg -> "ATTENDEE".equalsIgnoreCase(reg.getRole())) // Filter only attendees
+                .map(Registration::getAttendee)
+                .collect(Collectors.toList());
     }
 
-    public Registration registerForEvent(Long userId, Long eventId) {
+    public Registration registerForEvent(Long userId, Long id, String role) {
         Users attendee = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        Event event = eventRepo.findById(eventId)
+        Event event = eventRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
         Registration registration = new Registration();
         registration.setAttendee(attendee);
         registration.setEvent(event);
+        registration.setRole(role.toUpperCase());
 
         return registrationRepo.save(registration);
     }
