@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,6 +17,8 @@ const Events = () => {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const navigate = useNavigate();
+  
+  const descriptionRef = useRef(null); 
 
   const handleMouseEnter = (event, eventData) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -29,10 +31,11 @@ const Events = () => {
   };
 
   const handleMouseLeave = (event) => {
-    if (!event.relatedTarget || !event.currentTarget.contains(event.relatedTarget)) {
+    if (event.relatedTarget && descriptionRef.current && !descriptionRef.current.contains(event.relatedTarget)) {
       setHoveredEvent(null);
     }
   };
+  
 
   return (
     <Container className="text-center mt-5">
@@ -56,6 +59,7 @@ const Events = () => {
         <div 
           className="description-box show-tooltip"
           style={{ top: `${position.top}px`, left: `${position.left}px` }}
+          ref={descriptionRef} 
           onMouseLeave={handleMouseLeave}
         >
           <h4>{hoveredEvent.title}</h4>
